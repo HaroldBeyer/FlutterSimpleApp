@@ -27,6 +27,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var newTaskCtrl = TextEditingController();
+
+  void add() {
+    if (newTaskCtrl.text.isEmpty) return;
+    setState(() {
+      widget.items.add(Item(
+        title: newTaskCtrl.text,
+        done: false,
+      ));
+      newTaskCtrl.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +47,14 @@ class _HomePageState extends State<HomePage> {
           //Esuqerda
           leading: Text("Oi"),
           //meio
-          title: Text("Roufest"),
+          title: TextFormField(
+            controller: newTaskCtrl,
+            keyboardType: TextInputType.text,
+            style: TextStyle(color: Colors.black, fontSize: 16),
+            decoration: InputDecoration(
+                labelText: "Nova tarefa",
+                labelStyle: TextStyle(color: Colors.white)),
+          ),
           //direita
           actions: <Widget>[Icon(Icons.child_care)],
         ),
@@ -53,6 +73,11 @@ class _HomePageState extends State<HomePage> {
               },
             );
           },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: add,
+          child: Icon(Icons.add),
+          backgroundColor: Colors.orange,
         ));
   }
 }
