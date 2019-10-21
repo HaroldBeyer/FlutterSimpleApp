@@ -40,6 +40,7 @@ class _HomePageState extends State<HomePage> {
         done: false,
       ));
       newTaskCtrl.clear();
+      save();
     });
   }
 
@@ -47,6 +48,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       widget.items.removeAt(index);
     });
+    save();
   }
 
   //Future são tipo promises!
@@ -63,6 +65,11 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  save() async {
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setString('data', jsonEncode(widget.items));
+  }
+
   _HomePageState() {
     load();
   }
@@ -72,7 +79,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: AppBar(
           //Esuqerda
-          leading: Text("Oi"),
+          // leading: Text("Oi"),
           //meio
           title: TextFormField(
             controller: newTaskCtrl,
@@ -83,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                 labelStyle: TextStyle(color: Colors.white)),
           ),
           //direita
-          actions: <Widget>[Icon(Icons.child_care)],
+          //actions: <Widget>[Icon(Icons.child_care)],
         ),
         body: ListView.builder(
           itemCount: widget.items.length,
@@ -105,6 +112,7 @@ class _HomePageState extends State<HomePage> {
                 onChanged: (value) {
                   setState(() {
                     item.done = value;
+                    save();
                   });
                 },
               ),
